@@ -1,7 +1,7 @@
 // textNode.js
 // Part 3: Dynamic resizing + variable detection with dynamic handles
 
-import { useState, useRef, useEffect, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { Position, Handle } from 'reactflow';
 import { useStore } from '../store';
 
@@ -83,7 +83,7 @@ export const TextNode = ({ id, data }) => {
       {variables.map((varName, i) => {
         const topPercent = getVarHandleTop(i, variables.length);
         return (
-          <div key={varName} className="text-node-handle-wrapper">
+          <React.Fragment key={varName}>
             <Handle
               type="target"
               position={Position.Left}
@@ -96,7 +96,7 @@ export const TextNode = ({ id, data }) => {
             >
               {varName}
             </span>
-          </div>
+          </React.Fragment>
         );
       })}
 

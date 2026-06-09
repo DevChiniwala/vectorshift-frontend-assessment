@@ -2,6 +2,7 @@
 // Reusable node shell — all concrete nodes delegate to this component.
 // Accepts a declarative config for handles, icon, title, and accent color.
 
+import React from 'react';
 import { Handle, Position } from 'reactflow';
 
 export const BaseNode = ({
@@ -29,15 +30,13 @@ export const BaseNode = ({
     handleGroup.map((h, i) => {
       const topPercent = getTopPercent(i, handleGroup.length);
       return (
-        <div key={h.id} style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, pointerEvents: 'none' }}>
-          <div style={{ pointerEvents: 'auto' }}>
-            <Handle
-              type={h.type}
-              position={h.position}
-              id={h.id}
-              style={{ top: `${topPercent}%` }}
-            />
-          </div>
+        <React.Fragment key={h.id}>
+          <Handle
+            type={h.type}
+            position={h.position}
+            id={h.id}
+            style={{ top: `${topPercent}%` }}
+          />
           {h.label && (
             <span
               className={`text-node-var-label`}
@@ -51,7 +50,7 @@ export const BaseNode = ({
               {h.label}
             </span>
           )}
-        </div>
+        </React.Fragment>
       );
     });
 
