@@ -3,8 +3,10 @@
 
 import { useState, useRef, useEffect, useMemo } from 'react';
 import { Position, Handle } from 'reactflow';
+import { useStore } from '../store';
 
 export const TextNode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
   const [currText, setCurrText] = useState(data?.text || '{{ input }}');
   const [dimensions, setDimensions] = useState({ width: 220, height: 'auto' });
   const textareaRef = useRef(null);
@@ -57,6 +59,7 @@ export const TextNode = ({ id, data }) => {
 
   const handleTextChange = (e) => {
     setCurrText(e.target.value);
+    updateNodeField(id, 'text', e.target.value);
   };
 
   // Calculate positions for variable handles

@@ -4,10 +4,23 @@
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from './BaseNode';
+import { useStore } from '../store';
 
 export const TimerNode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
+
   const [delay, setDelay] = useState(data?.delay || 1000);
   const [unit, setUnit] = useState(data?.unit || 'ms');
+
+  const handleDelayChange = (e) => {
+    setDelay(Number(e.target.value));
+    updateNodeField(id, 'delay', Number(e.target.value));
+  };
+
+  const handleUnitChange = (e) => {
+    setUnit(e.target.value);
+    updateNodeField(id, 'unit', e.target.value);
+  };
 
   const handles = [
     { type: 'target', position: Position.Left, id: `${id}-trigger` },
@@ -29,7 +42,7 @@ export const TimerNode = ({ id, data }) => {
             className="node-field-input"
             type="number"
             value={delay}
-            onChange={(e) => setDelay(Number(e.target.value))}
+            onChange={handleDelayChange}
             min={0}
           />
         </div>
@@ -38,7 +51,7 @@ export const TimerNode = ({ id, data }) => {
           <select
             className="node-field-select"
             value={unit}
-            onChange={(e) => setUnit(e.target.value)}
+            onChange={handleUnitChange}
           >
             <option value="ms">ms</option>
             <option value="s">sec</option>

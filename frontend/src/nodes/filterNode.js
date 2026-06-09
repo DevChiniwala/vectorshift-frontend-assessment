@@ -4,10 +4,23 @@
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from './BaseNode';
+import { useStore } from '../store';
 
 export const FilterNode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
+
   const [condition, setCondition] = useState(data?.condition || '');
   const [operator, setOperator] = useState(data?.operator || 'equals');
+
+  const handleConditionChange = (e) => {
+    setCondition(e.target.value);
+    updateNodeField(id, 'condition', e.target.value);
+  };
+
+  const handleOperatorChange = (e) => {
+    setOperator(e.target.value);
+    updateNodeField(id, 'operator', e.target.value);
+  };
 
   const handles = [
     { type: 'target', position: Position.Left, id: `${id}-input` },
@@ -28,7 +41,7 @@ export const FilterNode = ({ id, data }) => {
         <select
           className="node-field-select"
           value={operator}
-          onChange={(e) => setOperator(e.target.value)}
+          onChange={handleOperatorChange}
         >
           <option value="equals">Equals</option>
           <option value="contains">Contains</option>
@@ -43,7 +56,7 @@ export const FilterNode = ({ id, data }) => {
           className="node-field-input"
           type="text"
           value={condition}
-          onChange={(e) => setCondition(e.target.value)}
+          onChange={handleConditionChange}
           placeholder="Enter value..."
         />
       </div>

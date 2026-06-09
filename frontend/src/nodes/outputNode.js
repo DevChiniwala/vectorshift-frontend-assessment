@@ -3,12 +3,25 @@
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from './BaseNode';
+import { useStore } from '../store';
 
 export const OutputNode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
+
   const [currName, setCurrName] = useState(
     data?.outputName || id.replace('customOutput-', 'output_')
   );
   const [outputType, setOutputType] = useState(data?.outputType || 'Text');
+
+  const handleNameChange = (e) => {
+    setCurrName(e.target.value);
+    updateNodeField(id, 'outputName', e.target.value);
+  };
+
+  const handleTypeChange = (e) => {
+    setOutputType(e.target.value);
+    updateNodeField(id, 'outputType', e.target.value);
+  };
 
   const handles = [
     { type: 'target', position: Position.Left, id: `${id}-value` },
@@ -28,7 +41,7 @@ export const OutputNode = ({ id, data }) => {
           className="node-field-input"
           type="text"
           value={currName}
-          onChange={(e) => setCurrName(e.target.value)}
+          onChange={handleNameChange}
         />
       </div>
       <div className="node-field">
@@ -36,7 +49,7 @@ export const OutputNode = ({ id, data }) => {
         <select
           className="node-field-select"
           value={outputType}
-          onChange={(e) => setOutputType(e.target.value)}
+          onChange={handleTypeChange}
         >
           <option value="Text">Text</option>
           <option value="Image">Image</option>

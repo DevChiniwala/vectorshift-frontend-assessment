@@ -4,10 +4,23 @@
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from './BaseNode';
+import { useStore } from '../store';
 
 export const APINode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
+
   const [method, setMethod] = useState(data?.method || 'GET');
   const [url, setUrl] = useState(data?.url || '');
+
+  const handleMethodChange = (e) => {
+    setMethod(e.target.value);
+    updateNodeField(id, 'method', e.target.value);
+  };
+
+  const handleUrlChange = (e) => {
+    setUrl(e.target.value);
+    updateNodeField(id, 'url', e.target.value);
+  };
 
   const handles = [
     { type: 'target', position: Position.Left, id: `${id}-url`, label: 'url' },
@@ -29,7 +42,7 @@ export const APINode = ({ id, data }) => {
         <select
           className="node-field-select"
           value={method}
-          onChange={(e) => setMethod(e.target.value)}
+          onChange={handleMethodChange}
         >
           <option value="GET">GET</option>
           <option value="POST">POST</option>
@@ -43,7 +56,7 @@ export const APINode = ({ id, data }) => {
           className="node-field-input"
           type="text"
           value={url}
-          onChange={(e) => setUrl(e.target.value)}
+          onChange={handleUrlChange}
           placeholder="https://api.example.com"
         />
       </div>

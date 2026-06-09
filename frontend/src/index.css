@@ -14,9 +14,11 @@
   
   --shadow-glow: 0 8px 32px rgba(0, 0, 0, 0.4);
   
+  --radius-sm: 8px;
   --radius-lg: 16px;
   --radius-pill: 999px;
   
+  --bg-elevated: rgba(255, 255, 255, 0.08);
   --accent-purple: #6366F1;
 }
 
@@ -221,6 +223,33 @@ body {
   gap: 12px;
   position: relative;
   z-index: 1;
+}
+
+.node-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.node-field-row {
+  display: flex;
+  gap: 12px;
+}
+
+.node-field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding-left: 2px;
+}
+
+.node-info-text {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  padding: 4px;
 }
 
 .node-field-input, .node-field-select, .node-field-textarea {

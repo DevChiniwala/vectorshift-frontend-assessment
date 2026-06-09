@@ -4,9 +4,17 @@
 import { useState } from 'react';
 import { Position } from 'reactflow';
 import { BaseNode } from './BaseNode';
+import { useStore } from '../store';
 
 export const MergeNode = ({ id, data }) => {
+  const updateNodeField = useStore((state) => state.updateNodeField);
+
   const [strategy, setStrategy] = useState(data?.strategy || 'concat');
+
+  const handleStrategyChange = (e) => {
+    setStrategy(e.target.value);
+    updateNodeField(id, 'strategy', e.target.value);
+  };
 
   const handles = [
     { type: 'target', position: Position.Left, id: `${id}-input_1`, label: 'input A' },
@@ -27,7 +35,7 @@ export const MergeNode = ({ id, data }) => {
         <select
           className="node-field-select"
           value={strategy}
-          onChange={(e) => setStrategy(e.target.value)}
+          onChange={handleStrategyChange}
         >
           <option value="concat">Concatenate</option>
           <option value="interleave">Interleave</option>
