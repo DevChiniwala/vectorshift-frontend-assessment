@@ -89,7 +89,7 @@ export const TextNode = ({ id, data }) => {
             />
             <span
               className="text-node-var-label"
-              style={{ top: `${topPercent}%` }}
+              style={{ top: `${topPercent}%`, left: '16px' }}
             >
               {varName}
             </span>
@@ -109,7 +109,7 @@ export const TextNode = ({ id, data }) => {
       </div>
 
       {/* Body */}
-      <div className="node-body">
+      <div className="node-body" style={{ paddingLeft: variables.length > 0 ? '82px' : '20px' }}>
         <div className="node-field">
           <label className="node-field-label">Content</label>
           <textarea

@@ -83,8 +83,8 @@ export const BaseNode = ({
         <div 
           className="node-body"
           style={{
-            paddingLeft: leftHandles.length > 0 ? '60px' : '20px',
-            paddingRight: rightHandles.length > 0 ? '60px' : '20px'
+            paddingLeft: leftHandles.length > 0 ? '82px' : '20px',
+            paddingRight: rightHandles.length > 0 ? '82px' : '20px'
           }}
         >
           {children}
