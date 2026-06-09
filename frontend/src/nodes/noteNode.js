@@ -2,6 +2,7 @@
 // Demonstrates: a handle-free annotation node (pure documentation)
 
 import { useState } from 'react';
+import { Position } from 'reactflow';
 import { BaseNode } from './BaseNode';
 import { useStore } from '../store';
 
@@ -17,14 +18,18 @@ export const NoteNode = ({ id, data }) => {
     updateNodeField(id, 'text', e.target.value);
   };
 
-  // No handles — this is a pure annotation/comment node
+  const handles = [
+    { type: 'target', position: Position.Left, id: `${id}-input` },
+    { type: 'source', position: Position.Right, id: `${id}-output` },
+  ];
+
   return (
     <BaseNode
       id={id}
       title="Note"
       icon="📝"
       accentColor="#64748B"
-      handles={[]}
+      handles={handles}
     >
       <textarea
         className="node-field-textarea"
@@ -32,7 +37,7 @@ export const NoteNode = ({ id, data }) => {
         onChange={handleTextChange}
         placeholder="Write a note..."
         rows={3}
-        style={{ minHeight: '60px' }}
+        style={{ minHeight: '60px', resize: 'vertical' }}
       />
     </BaseNode>
   );
