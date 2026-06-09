@@ -116,27 +116,386 @@ This isn't a tutorial clone. Every architectural decision — from the zero-boil
 
 ---
 
-## 🏛️ System Architecture
+### Interactive Architecture Diagram
 
-### The Canvas & State Layer
+<div align="center">
+<svg width="900" height="620" viewBox="0 0 900 620" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <!-- Gradients -->
+    <linearGradient id="archBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#080c18"/>
+      <stop offset="100%" style="stop-color:#0f0a1e"/>
+    </linearGradient>
+    <linearGradient id="frontendGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="backendGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#10b981"/>
+      <stop offset="100%" style="stop-color:#059669"/>
+    </linearGradient>
+    <linearGradient id="storeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f59e0b"/>
+      <stop offset="100%" style="stop-color:#d97706"/>
+    </linearGradient>
+    <linearGradient id="dataFlowGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a78bfa"/>
+      <stop offset="100%" style="stop-color:#38bdf8"/>
+    </linearGradient>
+    <linearGradient id="httpGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#f472b6"/>
+      <stop offset="100%" style="stop-color:#ec4899"/>
+    </linearGradient>
+    <linearGradient id="nodeAreaGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1e1b4b;stop-opacity:0.5"/>
+      <stop offset="100%" style="stop-color:#0f172a;stop-opacity:0.5"/>
+    </linearGradient>
 
-```
-┌─────────────────────────────────────────────────────────┐
-│                    React Application                     │
-│  ┌───────────────┐    ┌──────────────────────────────┐  │
-│  │  Toolbar      │    │   ReactFlow Canvas            │  │
-│  │  (Floating    │    │   ┌──────────────────────┐   │  │
-│  │   Pill UI)    │    │   │  Nodes (via BaseNode) │   │  │
-│  └───────────────┘    │   └──────────────────────┘   │  │
-│          │            │   ┌──────────────────────┐   │  │
-│          ▼            │   │  Animated Edges       │   │  │
-│  ┌───────────────┐    │   └──────────────────────┘   │  │
-│  │ Zustand Store │◄───┤   ┌──────────────────────┐   │  │
-│  │ (Global State)│    │   │  MiniMap / Controls   │   │  │
-│  └───────────────┘    │   └──────────────────────┘   │  │
-│                       └──────────────────────────────┘  │
-└─────────────────────────────────────────────────────────┘
-```
+    <!-- Filters -->
+    <filter id="archGlow">
+      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="archSoftGlow">
+      <feGaussianBlur stdDeviation="6" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="shadowFilter">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-color="#000000" flood-opacity="0.5"/>
+    </filter>
+  </defs>
+
+  <!-- ═══ BACKGROUND ═══ -->
+  <rect width="900" height="620" rx="16" fill="url(#archBg)"/>
+
+  <!-- Subtle grid -->
+  <line x1="0" y1="100" x2="900" y2="100" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="0" y1="200" x2="900" y2="200" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="0" y1="300" x2="900" y2="300" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="0" y1="400" x2="900" y2="400" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="0" y1="500" x2="900" y2="500" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="150" y1="0" x2="150" y2="620" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="300" y1="0" x2="300" y2="620" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="450" y1="0" x2="450" y2="620" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="600" y1="0" x2="600" y2="620" stroke="#ffffff04" stroke-width="1"/>
+  <line x1="750" y1="0" x2="750" y2="620" stroke="#ffffff04" stroke-width="1"/>
+
+  <!-- Background orbs -->
+  <circle cx="200" cy="200" r="120" fill="#6366f1" opacity="0.04" filter="url(#archSoftGlow)"/>
+  <circle cx="700" cy="200" r="100" fill="#38bdf8" opacity="0.04" filter="url(#archSoftGlow)"/>
+  <circle cx="450" cy="500" r="140" fill="#10b981" opacity="0.03" filter="url(#archSoftGlow)"/>
+
+  <!-- ═══ TITLE ═══ -->
+  <text x="450" y="32" font-family="'Segoe UI', system-ui, sans-serif" font-size="14" font-weight="700" text-anchor="middle" fill="#64748b" letter-spacing="4">SYSTEM ARCHITECTURE</text>
+  <line x1="300" y1="40" x2="600" y2="40" stroke="url(#frontendGrad)" stroke-width="1" opacity="0.4"/>
+
+  <!-- ═══ LAYER 1: USER INTERACTION ═══ -->
+  <text x="30" y="72" font-family="system-ui" font-size="10" fill="#475569" letter-spacing="2" font-weight="600">USER LAYER</text>
+
+  <!-- User Icon -->
+  <circle cx="80" cy="100" r="22" fill="none" stroke="#64748b" stroke-width="1.5" opacity="0.6"/>
+  <text x="80" y="105" font-family="system-ui" font-size="18" text-anchor="middle" fill="#94a3b8">👤</text>
+  <text x="80" y="135" font-family="system-ui" font-size="9" text-anchor="middle" fill="#64748b">User</text>
+
+  <!-- Action arrows from user -->
+  <path d="M 102 90 C 130 85, 145 80, 160 80" stroke="#64748b" stroke-width="1" fill="none" stroke-dasharray="4,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 102 100 C 130 100, 145 100, 160 100" stroke="#64748b" stroke-width="1" fill="none" stroke-dasharray="4,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M 102 110 C 130 115, 145 120, 160 120" stroke="#64748b" stroke-width="1" fill="none" stroke-dasharray="4,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="2s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- User actions -->
+  <rect x="162" y="68" width="100" height="22" rx="6" fill="#1e1b4b" stroke="#6366f1" stroke-width="0.8" opacity="0.9"/>
+  <text x="212" y="83" font-family="system-ui" font-size="9" text-anchor="middle" fill="#a5b4fc">Drag Nodes</text>
+
+  <rect x="162" y="93" width="100" height="22" rx="6" fill="#1e1b4b" stroke="#6366f1" stroke-width="0.8" opacity="0.9"/>
+  <text x="212" y="108" font-family="system-ui" font-size="9" text-anchor="middle" fill="#a5b4fc">Connect Edges</text>
+
+  <rect x="162" y="118" width="100" height="22" rx="6" fill="#1e1b4b" stroke="#6366f1" stroke-width="0.8" opacity="0.9"/>
+  <text x="212" y="133" font-family="system-ui" font-size="9" text-anchor="middle" fill="#a5b4fc">Configure Data</text>
+
+  <!-- ═══ LAYER 2: FRONTEND ═══ -->
+  <text x="30" y="175" font-family="system-ui" font-size="10" fill="#475569" letter-spacing="2" font-weight="600">FRONTEND</text>
+  <line x1="30" y1="180" x2="870" y2="180" stroke="url(#frontendGrad)" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- Toolbar Component -->
+  <rect x="30" y="195" width="160" height="70" rx="12" fill="#111827" stroke="#6366f1" stroke-width="1.2" filter="url(#shadowFilter)"/>
+  <rect x="30" y="195" width="160" height="22" rx="12" fill="#6366f1" opacity="0.15"/>
+  <rect x="30" y="207" width="160" height="10" rx="0" fill="#6366f1" opacity="0.15"/>
+  <circle cx="46" cy="208" r="5" fill="#6366f1" opacity="0.8" filter="url(#archGlow)">
+    <animate attributeName="opacity" values="0.8;0.4;0.8" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <text x="58" y="212" font-family="system-ui" font-size="10" font-weight="600" fill="#a5b4fc">Toolbar</text>
+  <text x="46" y="232" font-family="system-ui" font-size="8" fill="#64748b">Floating Pill UI</text>
+  <text x="46" y="244" font-family="system-ui" font-size="8" fill="#64748b">9 Draggable Node Types</text>
+  <text x="46" y="256" font-family="system-ui" font-size="8" fill="#64748b">backdrop-filter: blur()</text>
+
+  <!-- ReactFlow Canvas -->
+  <rect x="210" y="195" width="280" height="185" rx="12" fill="#111827" stroke="#38bdf8" stroke-width="1.2" filter="url(#shadowFilter)"/>
+  <rect x="210" y="195" width="280" height="22" rx="12" fill="#38bdf8" opacity="0.12"/>
+  <rect x="210" y="207" width="280" height="10" rx="0" fill="#38bdf8" opacity="0.12"/>
+  <circle cx="226" cy="208" r="5" fill="#38bdf8" opacity="0.8" filter="url(#archGlow)">
+    <animate attributeName="opacity" values="0.8;0.4;0.8" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="238" y="212" font-family="system-ui" font-size="10" font-weight="600" fill="#7dd3fc">ReactFlow Canvas</text>
+
+  <!-- Mini nodes inside canvas -->
+  <rect x="225" y="230" width="70" height="35" rx="6" fill="url(#nodeAreaGrad)" stroke="#38bdf8" stroke-width="0.8"/>
+  <text x="260" y="250" font-family="system-ui" font-size="7" text-anchor="middle" fill="#38bdf8">Input</text>
+  <circle cx="295" cy="248" r="3" fill="#38bdf8" filter="url(#archGlow)"/>
+
+  <rect x="315" y="225" width="70" height="35" rx="6" fill="url(#nodeAreaGrad)" stroke="#a78bfa" stroke-width="0.8"/>
+  <text x="350" y="245" font-family="system-ui" font-size="7" text-anchor="middle" fill="#a78bfa">Text</text>
+  <circle cx="315" cy="243" r="3" fill="#a78bfa" filter="url(#archGlow)"/>
+  <circle cx="385" cy="243" r="3" fill="#a78bfa" filter="url(#archGlow)"/>
+
+  <rect x="405" y="230" width="70" height="35" rx="6" fill="url(#nodeAreaGrad)" stroke="#f59e0b" stroke-width="0.8"/>
+  <text x="440" y="250" font-family="system-ui" font-size="7" text-anchor="middle" fill="#f59e0b">LLM</text>
+  <circle cx="405" cy="248" r="3" fill="#f59e0b" filter="url(#archGlow)"/>
+
+  <!-- Animated edges between mini nodes -->
+  <line x1="296" y1="248" x2="314" y2="243" stroke="#a78bfa" stroke-width="1" stroke-dasharray="3,2" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite"/>
+  </line>
+  <line x1="386" y1="243" x2="404" y2="248" stroke="#f59e0b" stroke-width="1" stroke-dasharray="3,2" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-10" dur="1s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- Canvas sub-labels -->
+  <text x="226" y="286" font-family="system-ui" font-size="8" fill="#64748b">Infinite Zoomable Canvas</text>
+  <text x="226" y="298" font-family="system-ui" font-size="8" fill="#64748b">Drag-Drop Node Placement</text>
+  <text x="226" y="310" font-family="system-ui" font-size="8" fill="#64748b">Animated Smoothstep Edges</text>
+
+  <!-- MiniMap -->
+  <rect x="410" y="280" width="65" height="45" rx="4" fill="#0f172a" stroke="#334155" stroke-width="0.8"/>
+  <rect x="418" y="290" width="10" height="6" rx="1" fill="#38bdf8" opacity="0.4"/>
+  <rect x="432" y="288" width="10" height="6" rx="1" fill="#a78bfa" opacity="0.4"/>
+  <rect x="446" y="291" width="10" height="6" rx="1" fill="#f59e0b" opacity="0.4"/>
+  <rect x="425" y="300" width="10" height="6" rx="1" fill="#10b981" opacity="0.4"/>
+  <text x="442" y="320" font-family="system-ui" font-size="6" text-anchor="middle" fill="#475569">MiniMap</text>
+
+  <!-- Controls -->
+  <rect x="226" y="322" width="55" height="45" rx="4" fill="#0f172a" stroke="#334155" stroke-width="0.8"/>
+  <text x="253" y="338" font-family="system-ui" font-size="10" text-anchor="middle" fill="#475569">+</text>
+  <line x1="236" y1="343" x2="270" y2="343" stroke="#334155" stroke-width="0.5"/>
+  <text x="253" y="355" font-family="system-ui" font-size="10" text-anchor="middle" fill="#475569">−</text>
+  <text x="253" y="372" font-family="system-ui" font-size="6" text-anchor="middle" fill="#475569">Controls</text>
+
+  <!-- BaseNode Abstraction Box -->
+  <rect x="510" y="195" width="185" height="100" rx="12" fill="#111827" stroke="#7c3aed" stroke-width="1.5" filter="url(#shadowFilter)"/>
+  <rect x="510" y="195" width="185" height="22" rx="12" fill="#7c3aed" opacity="0.18"/>
+  <rect x="510" y="207" width="185" height="10" rx="0" fill="#7c3aed" opacity="0.18"/>
+  <circle cx="526" cy="208" r="5" fill="#7c3aed" opacity="0.9" filter="url(#archGlow)">
+    <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="538" y="212" font-family="system-ui" font-size="10" font-weight="700" fill="#c4b5fd">BaseNode.js</text>
+  <text x="526" y="232" font-family="system-ui" font-size="8" fill="#94a3b8">Universal Node Wrapper</text>
+  <text x="526" y="246" font-family="system-ui" font-size="8" fill="#94a3b8">Auto Handle Positioning</text>
+  <text x="526" y="260" font-family="system-ui" font-size="8" fill="#94a3b8">Gradient Glow Headers</text>
+  <text x="526" y="274" font-family="system-ui" font-size="8" fill="#94a3b8">Glassmorphism Card Style</text>
+
+  <!-- Star badge on BaseNode -->
+  <rect x="642" y="190" width="50" height="14" rx="7" fill="#7c3aed" opacity="0.3"/>
+  <text x="667" y="200" font-family="system-ui" font-size="7" text-anchor="middle" fill="#c4b5fd">⭐ CORE</text>
+
+  <!-- Node types spawned from BaseNode -->
+  <rect x="510" y="305" width="56" height="22" rx="5" fill="#0f172a" stroke="#38bdf8" stroke-width="0.8"/>
+  <text x="538" y="319" font-family="system-ui" font-size="7" text-anchor="middle" fill="#38bdf8">Input</text>
+
+  <rect x="572" y="305" width="56" height="22" rx="5" fill="#0f172a" stroke="#10b981" stroke-width="0.8"/>
+  <text x="600" y="319" font-family="system-ui" font-size="7" text-anchor="middle" fill="#10b981">Output</text>
+
+  <rect x="634" y="305" width="56" height="22" rx="5" fill="#0f172a" stroke="#f59e0b" stroke-width="0.8"/>
+  <text x="662" y="319" font-family="system-ui" font-size="7" text-anchor="middle" fill="#f59e0b">LLM</text>
+
+  <rect x="510" y="332" width="56" height="22" rx="5" fill="#0f172a" stroke="#a78bfa" stroke-width="0.8"/>
+  <text x="538" y="346" font-family="system-ui" font-size="7" text-anchor="middle" fill="#a78bfa">Text</text>
+
+  <rect x="572" y="332" width="56" height="22" rx="5" fill="#0f172a" stroke="#ef4444" stroke-width="0.8"/>
+  <text x="600" y="346" font-family="system-ui" font-size="7" text-anchor="middle" fill="#ef4444">Filter</text>
+
+  <rect x="634" y="332" width="56" height="22" rx="5" fill="#0f172a" stroke="#ec4899" stroke-width="0.8"/>
+  <text x="662" y="346" font-family="system-ui" font-size="7" text-anchor="middle" fill="#ec4899">Merge</text>
+
+  <rect x="510" y="359" width="56" height="22" rx="5" fill="#0f172a" stroke="#06b6d4" stroke-width="0.8"/>
+  <text x="538" y="373" font-family="system-ui" font-size="7" text-anchor="middle" fill="#06b6d4">API</text>
+
+  <rect x="572" y="359" width="56" height="22" rx="5" fill="#0f172a" stroke="#84cc16" stroke-width="0.8"/>
+  <text x="600" y="373" font-family="system-ui" font-size="7" text-anchor="middle" fill="#84cc16">Timer</text>
+
+  <rect x="634" y="359" width="56" height="22" rx="5" fill="#0f172a" stroke="#64748b" stroke-width="0.8"/>
+  <text x="662" y="373" font-family="system-ui" font-size="7" text-anchor="middle" fill="#64748b">Note</text>
+
+  <!-- Lines from BaseNode to node grid -->
+  <line x1="538" y1="296" x2="538" y2="305" stroke="#7c3aed" stroke-width="0.8" opacity="0.5"/>
+  <line x1="600" y1="296" x2="600" y2="305" stroke="#7c3aed" stroke-width="0.8" opacity="0.5"/>
+  <line x1="662" y1="296" x2="662" y2="305" stroke="#7c3aed" stroke-width="0.8" opacity="0.5"/>
+
+  <!-- ═══ ZUSTAND STORE (Central Hub) ═══ -->
+  <rect x="720" y="195" width="160" height="130" rx="12" fill="#111827" stroke="#f59e0b" stroke-width="1.5" filter="url(#shadowFilter)"/>
+  <rect x="720" y="195" width="160" height="22" rx="12" fill="#f59e0b" opacity="0.15"/>
+  <rect x="720" y="207" width="160" height="10" rx="0" fill="#f59e0b" opacity="0.15"/>
+  <circle cx="736" cy="208" r="5" fill="#f59e0b" opacity="0.9" filter="url(#archGlow)">
+    <animate attributeName="opacity" values="0.9;0.4;0.9" dur="2s" repeatCount="indefinite"/>
+  </circle>
+  <text x="748" y="212" font-family="system-ui" font-size="10" font-weight="600" fill="#fbbf24">Zustand Store</text>
+
+  <text x="736" y="234" font-family="system-ui" font-size="8" fill="#94a3b8">nodes[]</text>
+  <rect x="779" y="226" width="38" height="12" rx="3" fill="#f59e0b" opacity="0.15"/>
+  <text x="798" y="235" font-family="system-ui" font-size="7" text-anchor="middle" fill="#fbbf24">state</text>
+
+  <text x="736" y="252" font-family="system-ui" font-size="8" fill="#94a3b8">edges[]</text>
+  <rect x="779" y="244" width="38" height="12" rx="3" fill="#f59e0b" opacity="0.15"/>
+  <text x="798" y="253" font-family="system-ui" font-size="7" text-anchor="middle" fill="#fbbf24">state</text>
+
+  <text x="736" y="270" font-family="system-ui" font-size="8" fill="#94a3b8">onConnect()</text>
+  <text x="736" y="284" font-family="system-ui" font-size="8" fill="#94a3b8">onNodesChange()</text>
+  <text x="736" y="298" font-family="system-ui" font-size="8" fill="#94a3b8">updateNodeField()</text>
+  <text x="736" y="312" font-family="system-ui" font-size="8" fill="#94a3b8">addNode()</text>
+
+  <!-- Animated connection: Canvas ↔ Store -->
+  <path d="M 490 270 C 530 270, 680 250, 718 250" stroke="url(#storeGrad)" stroke-width="1.5" fill="none" stroke-dasharray="5,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-16" dur="1.5s" repeatCount="indefinite"/>
+  </path>
+  <text x="605" y="260" font-family="system-ui" font-size="7" text-anchor="middle" fill="#fbbf24" opacity="0.7">state sync</text>
+
+  <!-- Animated connection: Toolbar → Store -->
+  <path d="M 190 245 C 250 290, 650 310, 718 290" stroke="#f59e0b" stroke-width="1" fill="none" stroke-dasharray="4,3" opacity="0.4">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="2s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- ═══ LAYER 3: HTTP BOUNDARY ═══ -->
+  <text x="30" y="410" font-family="system-ui" font-size="10" fill="#475569" letter-spacing="2" font-weight="600">HTTP BOUNDARY</text>
+  <line x1="30" y1="415" x2="870" y2="415" stroke="url(#httpGrad)" stroke-width="1" opacity="0.4" stroke-dasharray="8,4"/>
+
+  <!-- Submit Button -->
+  <rect x="330" y="393" width="130" height="32" rx="16" fill="#6366f1" filter="url(#shadowFilter)"/>
+  <text x="395" y="413" font-family="system-ui" font-size="10" font-weight="600" text-anchor="middle" fill="#ffffff">✓  Submit Workflow</text>
+  <circle cx="330" cy="409" r="16" fill="#6366f1" opacity="0.3" filter="url(#archSoftGlow)">
+    <animate attributeName="r" values="16;20;16" dur="3s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- POST arrow -->
+  <path d="M 395 426 L 395 455" stroke="url(#httpGrad)" stroke-width="2" fill="none" marker-end="url(#arrowPink)"/>
+  <rect x="355" y="433" width="80" height="16" rx="4" fill="#1e1b4b" stroke="#f472b6" stroke-width="0.8"/>
+  <text x="395" y="444" font-family="system-ui" font-size="7" text-anchor="middle" fill="#f9a8d4">POST /parse</text>
+
+  <!-- Animated data packet going down -->
+  <circle cx="395" cy="430" r="3" fill="#f472b6" filter="url(#archGlow)">
+    <animate attributeName="cy" values="426;455" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- JSON payload label -->
+  <rect x="470" y="423" width="110" height="30" rx="6" fill="#0f172a" stroke="#334155" stroke-width="0.8"/>
+  <text x="525" y="435" font-family="system-ui" font-size="7" text-anchor="middle" fill="#64748b">Request Payload</text>
+  <text x="525" y="447" font-family="monospace" font-size="7" text-anchor="middle" fill="#94a3b8">{ nodes[], edges[] }</text>
+  <line x1="460" y1="438" x2="470" y2="438" stroke="#334155" stroke-width="0.8"/>
+
+  <!-- ═══ LAYER 4: BACKEND ═══ -->
+  <text x="30" y="478" font-family="system-ui" font-size="10" fill="#475569" letter-spacing="2" font-weight="600">BACKEND</text>
+  <line x1="30" y1="483" x2="870" y2="483" stroke="url(#backendGrad)" stroke-width="0.8" opacity="0.3"/>
+
+  <!-- FastAPI Server -->
+  <rect x="30" y="495" width="150" height="100" rx="12" fill="#111827" stroke="#10b981" stroke-width="1.2" filter="url(#shadowFilter)"/>
+  <rect x="30" y="495" width="150" height="22" rx="12" fill="#10b981" opacity="0.15"/>
+  <rect x="30" y="507" width="150" height="10" rx="0" fill="#10b981" opacity="0.15"/>
+  <circle cx="46" cy="508" r="5" fill="#10b981" opacity="0.9" filter="url(#archGlow)">
+    <animate attributeName="opacity" values="0.9;0.5;0.9" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+  <text x="58" y="512" font-family="system-ui" font-size="10" font-weight="600" fill="#6ee7b7">FastAPI Server</text>
+  <text x="46" y="534" font-family="system-ui" font-size="8" fill="#94a3b8">Python 3.10+</text>
+  <text x="46" y="548" font-family="system-ui" font-size="8" fill="#94a3b8">CORS Middleware</text>
+  <text x="46" y="562" font-family="system-ui" font-size="8" fill="#94a3b8">Pydantic Models</text>
+  <text x="46" y="576" font-family="system-ui" font-size="8" fill="#94a3b8">Port :8000</text>
+
+  <!-- Arrow: FastAPI → Parse Pipeline -->
+  <path d="M 180 545 L 230 545" stroke="#10b981" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="1.5s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- /pipelines/parse Endpoint -->
+  <rect x="230" y="495" width="190" height="100" rx="12" fill="#111827" stroke="#14b8a6" stroke-width="1.2" filter="url(#shadowFilter)"/>
+  <rect x="230" y="495" width="190" height="22" rx="12" fill="#14b8a6" opacity="0.15"/>
+  <rect x="230" y="507" width="190" height="10" rx="0" fill="#14b8a6" opacity="0.15"/>
+  <text x="258" y="512" font-family="monospace" font-size="9" font-weight="600" fill="#5eead4">/pipelines/parse</text>
+  <text x="246" y="534" font-family="system-ui" font-size="8" fill="#94a3b8">1. Deserialize JSON body</text>
+  <text x="246" y="548" font-family="system-ui" font-size="8" fill="#94a3b8">2. Extract node IDs</text>
+  <text x="246" y="562" font-family="system-ui" font-size="8" fill="#94a3b8">3. Build adjacency list</text>
+  <text x="246" y="576" font-family="system-ui" font-size="8" fill="#94a3b8">4. Compute in-degree map</text>
+
+  <!-- Arrow: Parse → Kahn's -->
+  <path d="M 420 545 L 470 545" stroke="#10b981" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="1.5s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Kahn's Algorithm -->
+  <rect x="470" y="495" width="200" height="100" rx="12" fill="#111827" stroke="#a78bfa" stroke-width="1.5" filter="url(#shadowFilter)"/>
+  <rect x="470" y="495" width="200" height="22" rx="12" fill="#a78bfa" opacity="0.18"/>
+  <rect x="470" y="507" width="200" height="10" rx="0" fill="#a78bfa" opacity="0.18"/>
+  <circle cx="486" cy="508" r="5" fill="#a78bfa" opacity="0.9" filter="url(#archGlow)">
+    <animate attributeName="r" values="5;7;5" dur="1.8s" repeatCount="indefinite"/>
+  </circle>
+  <text x="498" y="512" font-family="system-ui" font-size="10" font-weight="700" fill="#c4b5fd">Kahn's Algorithm</text>
+  <text x="486" y="534" font-family="system-ui" font-size="8" fill="#94a3b8">BFS Topological Sort</text>
+  <text x="486" y="548" font-family="system-ui" font-size="8" fill="#94a3b8">Seed queue: in_degree == 0</text>
+  <text x="486" y="562" font-family="system-ui" font-size="8" fill="#94a3b8">Process neighbors</text>
+  <text x="486" y="576" font-family="system-ui" font-size="8" fill="#94a3b8">Complexity: O(V + E)</text>
+
+  <!-- Star badge on Kahn's -->
+  <rect x="618" y="490" width="50" height="14" rx="7" fill="#a78bfa" opacity="0.3"/>
+  <text x="643" y="500" font-family="system-ui" font-size="7" text-anchor="middle" fill="#c4b5fd">⭐ CORE</text>
+
+  <!-- Arrow: Kahn's → Result -->
+  <path d="M 670 545 L 710 545" stroke="#a78bfa" stroke-width="1.2" fill="none" stroke-dasharray="4,3" opacity="0.6">
+    <animate attributeName="stroke-dashoffset" values="0;-14" dur="1.5s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- Result Box -->
+  <rect x="710" y="498" width="170" height="44" rx="10" fill="#064e3b" stroke="#10b981" stroke-width="1.2"/>
+  <text x="795" y="516" font-family="system-ui" font-size="9" text-anchor="middle" fill="#6ee7b7">✅ is_dag: true</text>
+  <text x="795" y="533" font-family="system-ui" font-size="8" text-anchor="middle" fill="#94a3b8">Valid DAG — no cycles</text>
+
+  <rect x="710" y="548" width="170" height="44" rx="10" fill="#450a0a" stroke="#ef4444" stroke-width="1.2"/>
+  <text x="795" y="566" font-family="system-ui" font-size="9" text-anchor="middle" fill="#fca5a5">❌ is_dag: false</text>
+  <text x="795" y="583" font-family="system-ui" font-size="8" text-anchor="middle" fill="#94a3b8">Cycle detected</text>
+
+  <!-- Response arrow going back up -->
+  <path d="M 795 498 C 795 460, 450 430, 395 425" stroke="#10b981" stroke-width="1.5" fill="none" stroke-dasharray="6,3" opacity="0.5">
+    <animate attributeName="stroke-dashoffset" values="0;18" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <text x="620" y="455" font-family="system-ui" font-size="7" fill="#6ee7b7" opacity="0.7">JSON Response</text>
+
+  <!-- Response data packet going up -->
+  <circle cx="600" cy="460" r="3" fill="#10b981" filter="url(#archGlow)">
+    <animate attributeName="cx" values="795;395" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="cy" values="498;425" dur="3s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="1;0.3" dur="3s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ═══ MODAL (Result Display) ═══ -->
+  <rect x="30" y="393" width="130" height="32" rx="10" fill="#111827" stroke="#6366f1" stroke-width="1" opacity="0.9"/>
+  <text x="95" y="413" font-family="system-ui" font-size="9" text-anchor="middle" fill="#a5b4fc">🔔 Result Modal</text>
+
+  <!-- Arrow from Submit back to Modal -->
+  <path d="M 330 409 L 162 409" stroke="#6366f1" stroke-width="1" fill="none" stroke-dasharray="4,3" opacity="0.4">
+    <animate attributeName="stroke-dashoffset" values="0;14" dur="2s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- ═══ LEGEND ═══ -->
+  <rect x="730" y="393" width="150" height="32" rx="8" fill="#0f172a" stroke="#334155" stroke-width="0.8"/>
+  <circle cx="745" cy="409" r="3" fill="#6366f1"/>
+  <text x="753" y="412" font-family="system-ui" font-size="7" fill="#94a3b8">Frontend</text>
+  <circle cx="800" cy="409" r="3" fill="#10b981"/>
+  <text x="808" y="412" font-family="system-ui" font-size="7" fill="#94a3b8">Backend</text>
+  <circle cx="850" cy="409" r="3" fill="#f59e0b"/>
+  <text x="858" y="412" font-family="system-ui" font-size="7" fill="#94a3b8">State</text>
+</svg>
+</div>
 
 ---
 
