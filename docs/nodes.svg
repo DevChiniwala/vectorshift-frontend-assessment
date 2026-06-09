@@ -1,0 +1,129 @@
+<svg width="860" height="360" viewBox="0 0 860 360" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="cardBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#111827"/>
+      <stop offset="100%" style="stop-color:#0f172a"/>
+    </linearGradient>
+    <filter id="nodeGlow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <!-- Category gradients -->
+    <linearGradient id="coreGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#1e40af"/>
+      <stop offset="100%" style="stop-color:#7c3aed"/>
+    </linearGradient>
+    <linearGradient id="logicGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#7c3aed"/>
+      <stop offset="100%" style="stop-color:#db2777"/>
+    </linearGradient>
+    <linearGradient id="utilGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#b45309"/>
+      <stop offset="100%" style="stop-color:#047857"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="860" height="360" rx="14" fill="#0a0a14"/>
+
+  <!-- ── CORE NODES ── -->
+  <text x="43" y="36" font-family="system-ui" font-size="11" fill="#64748b" letter-spacing="2" font-weight="600">CORE NODES</text>
+  <line x1="40" y1="42" x2="280" y2="42" stroke="url(#coreGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- Input Node -->
+  <rect x="40" y="52" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#38bdf8" stroke-width="1.2" opacity="0.9"/>
+  <rect x="40" y="52" width="220" height="24" rx="10" fill="#38bdf8" opacity="0.18"/>
+  <rect x="40" y="64" width="220" height="12" rx="0" fill="#38bdf8" opacity="0.18"/>
+  <circle cx="56" cy="64" r="7" fill="#38bdf8" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="70" y="69" font-family="system-ui" font-size="12" font-weight="700" fill="#38bdf8">⬇  Input Node</text>
+  <text x="56" y="100" font-family="system-ui" font-size="10" fill="#94a3b8">Accepts external data into the pipeline.</text>
+  <text x="56" y="116" font-family="system-ui" font-size="10" fill="#94a3b8">Configurable name + data type selector.</text>
+  <circle cx="260" cy="92" r="5" fill="#38bdf8" filter="url(#nodeGlow)">
+    <animate attributeName="r" values="5;7;5" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Output Node -->
+  <rect x="40" y="152" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#10b981" stroke-width="1.2" opacity="0.9"/>
+  <rect x="40" y="152" width="220" height="24" rx="10" fill="#10b981" opacity="0.18"/>
+  <rect x="40" y="164" width="220" height="12" rx="0" fill="#10b981" opacity="0.18"/>
+  <circle cx="56" cy="164" r="7" fill="#10b981" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="70" y="169" font-family="system-ui" font-size="12" font-weight="700" fill="#10b981">⬆  Output Node</text>
+  <text x="56" y="200" font-family="system-ui" font-size="10" fill="#94a3b8">Receives pipeline result. Configurable</text>
+  <text x="56" y="216" font-family="system-ui" font-size="10" fill="#94a3b8">name + output type.</text>
+  <circle cx="40" cy="192" r="5" fill="#10b981" filter="url(#nodeGlow)">
+    <animate attributeName="r" values="5;7;5" dur="2.2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Text Node -->
+  <rect x="40" y="252" width="220" height="88" rx="10" fill="url(#cardBg)" stroke="#a78bfa" stroke-width="1.5" opacity="0.9"/>
+  <rect x="40" y="252" width="220" height="24" rx="10" fill="#a78bfa" opacity="0.2"/>
+  <rect x="40" y="264" width="220" height="12" rx="0" fill="#a78bfa" opacity="0.2"/>
+  <circle cx="56" cy="264" r="7" fill="#a78bfa" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="70" y="269" font-family="system-ui" font-size="12" font-weight="700" fill="#a78bfa">✍  Text Node</text>
+  <text x="56" y="298" font-family="system-ui" font-size="10" fill="#94a3b8">Dynamic Regex parser. Detects</text>
+  <text x="56" y="312" font-family="system-ui" font-size="10" fill="#94a3b8">{{ variables }} and spawns live handles.</text>
+  <rect x="56" y="322" width="52" height="12" rx="6" fill="#a78bfa" opacity="0.25"/>
+  <text x="82" y="331" font-family="system-ui" font-size="8" fill="#a78bfa" text-anchor="middle">✦ DYNAMIC</text>
+
+  <!-- ── LOGIC NODES ── -->
+  <text x="303" y="36" font-family="system-ui" font-size="11" fill="#64748b" letter-spacing="2" font-weight="600">LOGIC NODES</text>
+  <line x1="300" y1="42" x2="560" y2="42" stroke="url(#logicGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- LLM Node -->
+  <rect x="300" y="52" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#f59e0b" stroke-width="1.2" opacity="0.9"/>
+  <rect x="300" y="52" width="220" height="24" rx="10" fill="#f59e0b" opacity="0.18"/>
+  <rect x="300" y="64" width="220" height="12" rx="0" fill="#f59e0b" opacity="0.18"/>
+  <circle cx="316" cy="64" r="7" fill="#f59e0b" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="330" y="69" font-family="system-ui" font-size="12" font-weight="700" fill="#f59e0b">🤖  LLM Node</text>
+  <text x="316" y="100" font-family="system-ui" font-size="10" fill="#94a3b8">AI model invocation. Accepts system</text>
+  <text x="316" y="116" font-family="system-ui" font-size="10" fill="#94a3b8">prompt + user prompt inputs.</text>
+
+  <!-- Filter Node -->
+  <rect x="300" y="152" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#ef4444" stroke-width="1.2" opacity="0.9"/>
+  <rect x="300" y="152" width="220" height="24" rx="10" fill="#ef4444" opacity="0.18"/>
+  <rect x="300" y="164" width="220" height="12" rx="0" fill="#ef4444" opacity="0.18"/>
+  <circle cx="316" cy="164" r="7" fill="#ef4444" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="330" y="169" font-family="system-ui" font-size="12" font-weight="700" fill="#ef4444">🔍  Filter Node</text>
+  <text x="316" y="200" font-family="system-ui" font-size="10" fill="#94a3b8">Conditional routing. Pass/fail logic</text>
+  <text x="316" y="216" font-family="system-ui" font-size="10" fill="#94a3b8">based on configurable criteria.</text>
+
+  <!-- Merge Node -->
+  <rect x="300" y="252" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#ec4899" stroke-width="1.2" opacity="0.9"/>
+  <rect x="300" y="252" width="220" height="24" rx="10" fill="#ec4899" opacity="0.18"/>
+  <rect x="300" y="264" width="220" height="12" rx="0" fill="#ec4899" opacity="0.18"/>
+  <circle cx="316" cy="264" r="7" fill="#ec4899" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="330" y="269" font-family="system-ui" font-size="12" font-weight="700" fill="#ec4899">⊕  Merge Node</text>
+  <text x="316" y="300" font-family="system-ui" font-size="10" fill="#94a3b8">Combines multiple upstream inputs</text>
+  <text x="316" y="316" font-family="system-ui" font-size="10" fill="#94a3b8">into a single downstream payload.</text>
+
+  <!-- ── UTILITY NODES ── -->
+  <text x="563" y="36" font-family="system-ui" font-size="11" fill="#64748b" letter-spacing="2" font-weight="600">UTILITY NODES</text>
+  <line x1="560" y1="42" x2="820" y2="42" stroke="url(#utilGrad)" stroke-width="1.5" opacity="0.7"/>
+
+  <!-- API Call Node -->
+  <rect x="560" y="52" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#06b6d4" stroke-width="1.2" opacity="0.9"/>
+  <rect x="560" y="52" width="220" height="24" rx="10" fill="#06b6d4" opacity="0.18"/>
+  <rect x="560" y="64" width="220" height="12" rx="0" fill="#06b6d4" opacity="0.18"/>
+  <circle cx="576" cy="64" r="7" fill="#06b6d4" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="590" y="69" font-family="system-ui" font-size="12" font-weight="700" fill="#06b6d4">🌐  API Call Node</text>
+  <text x="576" y="100" font-family="system-ui" font-size="10" fill="#94a3b8">HTTP request executor. Configurable</text>
+  <text x="576" y="116" font-family="system-ui" font-size="10" fill="#94a3b8">method, URL, and headers.</text>
+
+  <!-- Timer Node -->
+  <rect x="560" y="152" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#84cc16" stroke-width="1.2" opacity="0.9"/>
+  <rect x="560" y="152" width="220" height="24" rx="10" fill="#84cc16" opacity="0.18"/>
+  <rect x="560" y="164" width="220" height="12" rx="0" fill="#84cc16" opacity="0.18"/>
+  <circle cx="576" cy="164" r="7" fill="#84cc16" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="590" y="169" font-family="system-ui" font-size="12" font-weight="700" fill="#84cc16">⏱  Timer Node</text>
+  <text x="576" y="200" font-family="system-ui" font-size="10" fill="#94a3b8">Introduces configurable time delays</text>
+  <text x="576" y="216" font-family="system-ui" font-size="10" fill="#94a3b8">or scheduled triggers into the flow.</text>
+
+  <!-- Note Node -->
+  <rect x="560" y="252" width="220" height="80" rx="10" fill="url(#cardBg)" stroke="#f97316" stroke-width="1.2" opacity="0.9"/>
+  <rect x="560" y="252" width="220" height="24" rx="10" fill="#f97316" opacity="0.18"/>
+  <rect x="560" y="264" width="220" height="12" rx="0" fill="#f97316" opacity="0.18"/>
+  <circle cx="576" cy="264" r="7" fill="#f97316" opacity="0.9" filter="url(#nodeGlow)"/>
+  <text x="590" y="269" font-family="system-ui" font-size="12" font-weight="700" fill="#f97316">📝  Note Node</text>
+  <text x="576" y="300" font-family="system-ui" font-size="10" fill="#94a3b8">Non-functional annotation. Free-text</text>
+  <text x="576" y="316" font-family="system-ui" font-size="10" fill="#94a3b8">comments for pipeline documentation.</text>
+</svg>
