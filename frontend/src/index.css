@@ -280,6 +280,8 @@ body {
   height: 12px !important;
   border: 2px solid var(--node-accent) !important;
   background: var(--bg-card) !important;
+  z-index: 100 !important;
+  cursor: crosshair !important;
 }
 
 .text-node-handle-wrapper {
