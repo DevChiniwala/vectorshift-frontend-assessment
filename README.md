@@ -230,7 +230,7 @@ flowchart TD
 
     F --> K{Node Type?}
     K -->|TextNode| L[Regex Parser Watches Input]
-    L --> M[{{ variables }} Detected → Handle Spawned]
+    L --> M["{{ variables }} Detected → Handle Spawned"]
     M --> D
     K -->|Other Nodes| N[Config Fields Updated in Store]
     N --> D
