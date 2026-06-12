@@ -2,14 +2,17 @@
 // Part 3: Dynamic resizing + variable detection with dynamic handles
 
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { Position, Handle } from 'reactflow';
+import { Position, Handle, useUpdateNodeInternals } from 'reactflow';
 import { useStore } from '../store';
 
 export const TextNode = ({ id, data }) => {
   const updateNodeField = useStore((state) => state.updateNodeField);
+  const removeEdgesByHandles = useStore((state) => state.removeEdgesByHandles);
+  const updateNodeInternals = useUpdateNodeInternals();
   const [currText, setCurrText] = useState(data?.text || '{{ input }}');
   const [dimensions, setDimensions] = useState({ width: 220, height: 'auto' });
   const textareaRef = useRef(null);
+  const prevVarsRef = useRef([]);
 
   // ─── Part 3A: Dynamic Resizing ──────────────────────────
   useEffect(() => {
@@ -51,6 +54,22 @@ export const TextNode = ({ id, data }) => {
     }
     return vars;
   }, [currText]);
+
+  useEffect(() => {
+    // 1. Force ReactFlow to recalculate handle positions whenever variables change
+    updateNodeInternals(id);
+
+    // 2. Identify if any variables were removed and clean up dangling edges
+    const prevVars = prevVarsRef.current;
+    const removedVars = prevVars.filter(v => !variables.includes(v));
+    
+    if (removedVars.length > 0) {
+      const removedHandleIds = removedVars.map(v => `${id}-var-${v}`);
+      removeEdgesByHandles(removedHandleIds);
+    }
+
+    prevVarsRef.current = variables;
+  }, [variables, id, updateNodeInternals, removeEdgesByHandles]);
 
   // Build handles: dynamic variable handles on left, output on right
   const rightHandles = [

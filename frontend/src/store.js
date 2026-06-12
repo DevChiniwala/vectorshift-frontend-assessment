@@ -74,4 +74,14 @@ export const useStore = create((set, get) => ({
         }),
       });
     },
+    // Remove edges whose sourceHandle or targetHandle matches any of the given IDs.
+    // Used by TextNode to clean up dangling edges when {{variables}} are deleted.
+    removeEdgesByHandles: (handleIds) => {
+      const handleSet = new Set(handleIds);
+      set({
+        edges: get().edges.filter(
+          (e) => !handleSet.has(e.sourceHandle) && !handleSet.has(e.targetHandle)
+        ),
+      });
+    },
   }));

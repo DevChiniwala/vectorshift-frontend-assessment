@@ -79,9 +79,10 @@ export const PipelineUI = () => {
               return;
             }
       
-            const position = reactFlowInstance.screenToFlowPosition({
-              x: event.clientX,
-              y: event.clientY,
+            const reactFlowBounds = reactFlowWrapper.current.getBoundingClientRect();
+            const position = reactFlowInstance.project({
+              x: event.clientX - reactFlowBounds.left,
+              y: event.clientY - reactFlowBounds.top,
             });
 
             const nodeID = getNodeID(type);

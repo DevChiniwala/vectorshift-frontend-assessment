@@ -21,6 +21,12 @@ export const AlertModal = ({ isOpen, onClose, data }) => {
               {data?.is_dag ? '✓' : '✕'}
             </div>
           </div>
+          <div className="modal-dag-status" style={{ marginBottom: 0 }}>
+            <span>Pipeline: {data?.is_connected ? 'Valid' : 'Invalid (disconnected nodes)'}</span>
+            <div className={`status-icon ${data?.is_connected ? 'valid' : 'invalid'}`}>
+              {data?.is_connected ? '✓' : '✕'}
+            </div>
+          </div>
         </div>
 
         <button className="modal-close-btn" onClick={onClose}>

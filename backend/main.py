@@ -38,6 +38,7 @@ class PipelineResponse(BaseModel):
     num_nodes: int
     num_edges: int
     is_dag: bool
+    is_connected: bool
 
 
 # ── Application Setup ────────────────────────────────────────────────────────
@@ -111,6 +112,35 @@ def is_dag(nodes: List[Node], edges: List[Edge]) -> bool:
     # If we visited every node, no cycle exists → it's a DAG
     return visited_count == len(node_ids)
 
+def is_weakly_connected(nodes: List[Node], edges: List[Edge]) -> bool:
+    """
+    Determine whether the graph is weakly connected (all nodes belong
+    to a single connected component when ignoring edge direction).
+    """
+    if not nodes:
+        return True
+
+    # Undirected adjacency list
+    adj = {node.id: [] for node in nodes}
+    for edge in edges:
+        if edge.source in adj and edge.target in adj:
+            adj[edge.source].append(edge.target)
+            adj[edge.target].append(edge.source)
+
+    # BFS from the first node
+    start_node = nodes[0].id
+    visited = {start_node}
+    queue = deque([start_node])
+
+    while queue:
+        curr = queue.popleft()
+        for neighbor in adj[curr]:
+            if neighbor not in visited:
+                visited.add(neighbor)
+                queue.append(neighbor)
+
+    return len(visited) == len(nodes)
+
 
 # ── Routes ────────────────────────────────────────────────────────────────────
 
@@ -127,9 +157,11 @@ def parse_pipeline(pipeline: PipelineRequest):
     - ``num_nodes``  – total number of nodes
     - ``num_edges``  – total number of edges
     - ``is_dag``     – whether the graph is a valid DAG
+    - ``is_connected`` – whether all nodes form a single connected pipeline
     """
     return PipelineResponse(
         num_nodes=len(pipeline.nodes),
         num_edges=len(pipeline.edges),
         is_dag=is_dag(pipeline.nodes, pipeline.edges),
+        is_connected=is_weakly_connected(pipeline.nodes, pipeline.edges),
     )

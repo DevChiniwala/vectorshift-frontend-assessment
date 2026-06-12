@@ -28,8 +28,9 @@ This isn't a tutorial clone. Every architectural decision — from the zero-boil
 ## ✨ Features
 
 - 🏗️ **Zero-Boilerplate `BaseNode` Architecture** — A single declarative wrapper powers all 9 node types. New nodes require no UI code whatsoever.
-- 🔁 **Kahn's Algorithm DAG Validation** — The FastAPI backend builds an adjacency list, computes in-degrees, and runs a BFS topological sort to detect cycles and validate pipeline integrity.
+- 🔁 **Kahn's Algorithm & Connected Components** — The FastAPI backend computes in-degrees to detect cycles (DAG), and runs a BFS to validate that the graph is fully connected (no orphaned nodes).
 - ✍️ **Real-Time Regex Variable Parsing** — The `TextNode` dynamically spawns new input handles as the user types `{{ variable_name }}` syntax — live, with zero re-renders.
+- 🧹 **Automatic Dangling Edge Cleanup** — If a user deletes a `{{variable}}`, the system automatically detects the missing handle and purges any connected edges to prevent state corruption.
 - 🎨 **Dark Glassmorphism Design System** — A bespoke CSS design system featuring `backdrop-filter: blur()`, radial gradient glows, animated dashed edges, and a floating pill-shaped toolbar.
 - 🧠 **Zustand Global State** — A clean, flat Zustand store manages all node/edge mutations, selected node state, and pipeline submission — no prop drilling, no Redux boilerplate.
 - 📦 **9 Production-Ready Nodes** spanning Core, Logic, and Utility categories.
